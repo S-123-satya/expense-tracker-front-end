@@ -1,36 +1,71 @@
-import { Col, Container, Row } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { useState, useRef } from "react";
 
-function LoginForm() {
+import classes from "./Login.module.css";
+import axios from "axios";
+
+const LoginForm = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  const switchAuthModeHandler = () => {
+    setIsLogin((prevState) => !prevState);
+  };
+  const submithandler = async (e) => {
+    e.preventDefault();
+    setIsSubmit(true);
+    let url;
+    const obj = {
+      password: passwordRef.current.value,
+      email: emailRef.current.value,
+      returnSecureToken: true,
+    };
+    if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCxu324ZjtUtZVu_vfKSLRfZHtGouSdclo";
+    } else {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCxu324ZjtUtZVu_vfKSLRfZHtGouSdclo";
+    }
+    const response = await axios.post(url, obj);
+    console.log(response);
+    passwordRef.current.value = "";
+    emailRef.current.value = "";
+    setIsSubmit(false);
+  };
+
   return (
-    <Container className="text-center align-item-center">
-      <Row>
-        <Col>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+    <section className={classes.auth}>
+      <h1>{isLogin ? "Login" : "Sign Up"}</h1>
+      <form onSubmit={submithandler}>
+        <div className={classes.control}>
+          <label htmlFor="email">Your Email</label>
+          <input ref={emailRef} type="email" id="email" required />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor="password">Your Password</label>
+          <input ref={passwordRef} type="password" id="password" required />
+        </div>
+        <div className={classes.actions}>
+          {isSubmit ? (
+            <button className={classes.toggle}>requesting sending</button>
+          ) : (
+            <button type="submit">
+              {isLogin ? "Login" : "Create account"}
+            </button>
+          )}
+          <button
+            type="button"
+            className={classes.toggle}
+            onClick={switchAuthModeHandler}
+          >
+            {isLogin ? "Create new account" : "Login with existing account"}
+          </button>
+        </div>
+      </form>
+    </section>
   );
-}
+};
 
 export default LoginForm;
