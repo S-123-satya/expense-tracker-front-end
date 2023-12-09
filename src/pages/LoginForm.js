@@ -30,6 +30,8 @@ const LoginForm = () => {
     }
     const response = await axios.post(url, obj);
     console.log(response);
+    localStorage.setItem("token", response?.data?.idToken);
+
     passwordRef.current.value = "";
     emailRef.current.value = "";
     setIsSubmit(false);
@@ -47,12 +49,23 @@ const LoginForm = () => {
           <label htmlFor="password">Your Password</label>
           <input ref={passwordRef} type="password" id="password" required />
         </div>
+        {!isLogin && (
+          <div className={classes.control}>
+            <label htmlFor="cpassword">Confirm Password</label>
+            <input ref={passwordRef} type="password" id="cpassword" required />
+          </div>
+        )}
         <div className={classes.actions}>
           {isSubmit ? (
             <button className={classes.toggle}>requesting sending</button>
           ) : (
             <button type="submit">
               {isLogin ? "Login" : "Create account"}
+            </button>
+          )}
+          {isLogin && (
+            <button type="button" className={` ${classes.toggle} underline`}>
+              Forget password
             </button>
           )}
           <button
