@@ -3,9 +3,11 @@ import { useState, useRef } from "react";
 import classes from "./Login.module.css";
 import axios from "axios";
 import { useAuth } from "../store/auth-context";
+import {  useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const authCtx=useAuth()
+  let history = useNavigate();;
   const [isSign, setIsSign] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const emailRef = useRef();
@@ -50,6 +52,7 @@ const LoginForm = () => {
       setIsSubmit(false);
       if(isSign){
         authCtx.login(email,idToken);
+        history("/home");
       }
     } catch (error) {
      console.log(error); 
