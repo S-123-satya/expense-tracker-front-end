@@ -12,16 +12,13 @@ const Expense = (props) => {
     setFilteredYear(selectedYear);
     const filterExpense = authCtx.expenses.filter((expense) => {
       const date=expense.date.split('-')[0];
-      console.log(expense.date);
       if (date == selectedYear) return expense;
     });
     setFilteredExpense(filterExpense);
-    console.log(filterExpense);
   };
   useEffect(()=>{
     filterChangeHandler(filteredYear)
   },[filteredYear,authCtx.expenses])
-  console.log(filteredExpense);
   return (
     <Card className="p-4 rounded-lg mx-20 m-2 bg-slate-600">
       <ExpenseFilter

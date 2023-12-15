@@ -17,11 +17,8 @@ const ExpenseChart= props =>{
         {label: 'Nov', value:0},
         {label: 'Dec', value:0},
     ];
-    console.log(props.expenses);
     for (const expense of props.expenses){
-        console.log(expense);
         const expenseMonth = expense.date.split("-")[1]; 
-        console.log(expenseMonth);
         chartDataPoints[expenseMonth-1].value +=expense.amount ;
     };
     return (

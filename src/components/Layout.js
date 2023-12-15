@@ -1,5 +1,4 @@
 import React from "react";
-import LoginForm from "../pages/LoginForm";
 import Header from "./Header";
 import { useAuth } from "../store/auth-context";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -17,7 +16,6 @@ const Layout = () => {
         <div>
           <Header />
           <Outlet />
-          {/* <footer>footer</footer> */}
         </div>
       ) : (<div className="h-screen grid ">
 

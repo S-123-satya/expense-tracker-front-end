@@ -23,7 +23,6 @@ const ExpenseForm = (props) => {
     const response=await axios.post(`https://expense-tracker-cfb73-default-rtdb.firebaseio.com/${userPath}.json`,expenseData);
     expenseData = { ...expenseData, id: response.data };
     authCtx.addExpense(expenseData);
-    console.log(response);
     setExpenesAmt("");
     setExpenesDate("");
     setExpenesTitle("");
