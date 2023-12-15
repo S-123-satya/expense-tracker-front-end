@@ -10,8 +10,11 @@ const defaultValues = {
   isShowProfile: false,
   username: "",
   picUrl: "",
-  expenses:[],
+  expenses: [],
   isEmailVerified: false,
+  isEdit: false,
+  editExpenseForm: {},
+  isFormVisible: false,
 };
 const reducerFxn = (state, action) => {
   if (action.type === "LOGIN") {
@@ -41,26 +44,41 @@ const reducerFxn = (state, action) => {
   if (action.type === "ADD") {
     return { ...state, expenses: [...state.expenses, { ...action.expense }] };
   }
+  if (action.type === "ISFORMVISIBLE") {
+    return { ...state, isFormVisible:!state.isFormVisible };
+  }
+  if (action.type === "EDIT") {
+    return {
+      ...state,
+      editExpenseForm: { ...action.expense },
+      isEdit: true,
+      isFormVisible: true,
+    };
+  }
   return defaultValues;
 };
 const AuthProvider = (props) => {
-  // const navigate=useNavigate();
   const [authState, dispachAuth] = useReducer(reducerFxn, defaultValues);
   const login = (email, token) => {
     dispachAuth({ type: "LOGIN", email, token });
   };
   const logout = () => {
-    
     dispachAuth({ type: "LOGOUT", });
   };
   const addExpense = (expense) => {
     dispachAuth({ type: "ADD",expense});
+  };
+  const editExpense = (expense) => {
+    dispachAuth({ type: "EDIT",expense});
   };
   const fillProfile = (username, picUrl, isEmailVerified) => {
     dispachAuth({ type: "PROFILE", username, picUrl, isEmailVerified });
   };
   const showProfile = () => {
     dispachAuth({ type: "ISSHOWPROFILE" });
+  };
+  const setIsFormVisible = () => {
+    dispachAuth({ type: "ISFORMVISIBLE" });
   };
   return (
     <AuthContext.Provider
@@ -74,11 +92,16 @@ const AuthProvider = (props) => {
         isFillProfile: authState.isFillProfile,
         isShowProfile: authState.isShowProfile,
         isEmailVerified: authState.isEmailVerified,
+        isEdit: authState.isEdit,
+        editExpenseForm: authState.editExpenseForm,
+        isFormVisible:authState.isFormVisible,
         fillProfile,
         login,
         logout,
         showProfile,
         addExpense,
+        editExpense,
+        setIsFormVisible,
       }}
     >
       {props.children}
