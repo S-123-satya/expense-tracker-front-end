@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Card from "../UI/Card";
 import { useAuth } from "../../store/auth-context";
+import axios from "axios";
 
 const ExpenseForm = (props) => {
   const authCtx=useAuth();
@@ -11,15 +12,18 @@ const ExpenseForm = (props) => {
   const toggleFormHandler = (e) => {
     setIsFormVisible(prevValue=>!prevValue);
   };
-  function submitHandler(e) {
+  async function submitHandler(e) {
     e.preventDefault();
-    const expenseData = {
-      id:new Date().toISOString(),
+    let expenseData = {
       title: expenseTitle,
       amount: expenseAmt,
       date: new Date(expenseDate),
     };
+    const userPath=authCtx.email.split('@')[0];
+    const response=await axios.post(`https://expense-tracker-cfb73-default-rtdb.firebaseio.com/${userPath}.json`,expenseData);
+    expenseData = { ...expenseData, id: response.data };
     authCtx.addExpense(expenseData);
+    console.log(response);
     setExpenesAmt("");
     setExpenesDate("");
     setExpenesTitle("");

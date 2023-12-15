@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import AuthContext from "./auth-context";
+import { useNavigate } from "react-router-dom";
 
 const defaultValues = {
   isLogin: false,
@@ -43,11 +44,13 @@ const reducerFxn = (state, action) => {
   return defaultValues;
 };
 const AuthProvider = (props) => {
+  // const navigate=useNavigate();
   const [authState, dispachAuth] = useReducer(reducerFxn, defaultValues);
   const login = (email, token) => {
     dispachAuth({ type: "LOGIN", email, token });
   };
   const logout = () => {
+    
     dispachAuth({ type: "LOGOUT", });
   };
   const addExpense = (expense) => {

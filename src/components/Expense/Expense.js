@@ -11,7 +11,9 @@ const Expense = (props) => {
   const filterChangeHandler = (selectedYear) => {
     setFilteredYear(selectedYear);
     const filterExpense = authCtx.expenses.filter((expense) => {
-      if (expense.date.getFullYear() == selectedYear) return expense;
+      const date=expense.date.split('-')[0];
+      console.log(expense.date);
+      if (date == selectedYear) return expense;
     });
     setFilteredExpense(filterExpense);
     console.log(filterExpense);
