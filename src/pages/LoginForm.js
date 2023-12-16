@@ -8,19 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../store";
 
 const LoginForm = () => {
-  const authState=useSelector(state=>state.auth);
   const dispatch=useDispatch()
   let navigate = useNavigate();;
   const [isSign, setIsSign] = useState(true);
   const [isSubmit, setIsSubmit] = useState(false);
-  // useEffect(()=>{
-  //   const email=localStorage.getItem('email');
-  //   const token=localStorage.getItem('token');
-  //   if(email && token){
-  //     authState.login(email,token);
-  //     navigate('/home')
-  //   }
-  // },[])
+  useEffect(()=>{
+    const email=localStorage.getItem('email');
+    const token=localStorage.getItem('token');
+    if(email && token){
+      dispatch(authActions.login({email,token}));
+      navigate('/home')
+    }
+  },[])
   const emailRef = useRef();
   const passwordRef = useRef();
   const cpasswordRef = useRef();
